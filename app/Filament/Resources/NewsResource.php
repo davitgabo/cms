@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -33,15 +34,18 @@ class NewsResource extends Resource
             ->schema([
                 TextInput::make('title.en')
                     ->label('Title (EN)')
+                    ->columnSpanFull()
                     ->required(),
                 TextInput::make('title.ka')
                     ->label('Title (GE)')
+                    ->columnSpanFull()
                     ->required(),
                 TextInput::make('slug')
                     ->label('Slug')
                     ->disabled(),
                 DateTimePicker::make('publish_date')
                     ->label('Publish Date')
+                    ->default(now())
                     ->native(false)
                     ->displayFormat('Y-m-d H:i'),
                 Textarea::make('description.en')
@@ -56,9 +60,16 @@ class NewsResource extends Resource
                     ->image()
                     ->disk('public')
                     ->directory('uploads/news_images'),
+                Select::make('categories')
+                    ->visibleOn('create')
+                    ->label('Categories')
+                    ->multiple()
+                    ->preload()
+                    ->relationship('categories', 'name', fn (Builder $query) => $query->where('type', 'news'))
+                    ->required(),
                 CheckBox::make('publish')
-                            ->label('Publish'),
-                    ]);
+                    ->label('Publish'),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -109,6 +120,7 @@ class NewsResource extends Resource
     {
         return [
             RelationManagers\CategoriesRelationManager::class,
+            RelationManagers\GalleriesRelationManager::class,
         ];
     }
 

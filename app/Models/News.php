@@ -15,8 +15,6 @@ class News extends Model
     ];
     protected static function booted()
     {
-        parent::boot();
-
         static::created(function (News $news) {
             // For newly created menus, id is now guaranteed
             $news->slug = 'news/' . Str::slug($news->title['ka']) . '-' . $news->id;
@@ -37,8 +35,13 @@ class News extends Model
 
     }
 
-    public function categories()
+    public function categories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function galleries(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Gallery::class);
     }
 }

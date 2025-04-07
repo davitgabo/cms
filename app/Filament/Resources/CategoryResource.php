@@ -37,6 +37,7 @@ class CategoryResource extends Resource
                         'news' => 'News',
                         'blog' => 'Blog'
                     ])
+                    ->required(),
             ]);
     }
 
@@ -55,6 +56,7 @@ class CategoryResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
