@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('news', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->json('title');
-            $table->json('description')->nullable();
             $table->string('slug',191)->nullable()->unique();
-            $table->string('image',191)->nullable();
-            $table->dateTime('publish_date')->nullable();
+            $table->json('short_description')->nullable();
+            $table->json('full_description')->nullable();
+            $table->string('image')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->boolean('publish')->default(false);
             $table->integer('order')->default(0);
             $table->timestamps();
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('news');
+        Schema::dropIfExists('events');
     }
 };

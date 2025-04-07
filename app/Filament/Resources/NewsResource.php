@@ -87,12 +87,11 @@ class NewsResource extends Resource
                     ->searchable(),
 
                 TextColumn::make('slug')
-                    ->label('Slug')
-                    ->sortable(),
+                    ->label('Slug'),
 
                 ImageColumn::make('image')
                     ->label('Featured Image')
-                    ->square(), // explicitly formatted for a clear square aspect ratio
+                    ->square(),
 
                 TextColumn::make('publish_date')
                     ->label('Publish Date')

@@ -23,11 +23,11 @@ class News extends Model
 
         static::updated(function (News $news) {
             // On update, id is guaranteed, refresh slug
-            $news->slug = 'news/' . Str::slug($news->name['ka']) . '-' . $news->id;
+            $news->slug = 'news/' . Str::slug($news->title['ka']) . '-' . $news->id;
             $news->saveQuietly();
         });
 
-        static::deleting(function ($news) {
+        static::deleting(function (News $news) {
             if ($news->image) {
                 Storage::disk('public')->delete($news->image);
             }
