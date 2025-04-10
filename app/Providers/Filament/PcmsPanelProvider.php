@@ -26,6 +26,7 @@ class PcmsPanelProvider extends PanelProvider
             ->default()
             ->id('pcms')
             ->path('pcms')
+            ->brandName('Proservice')
             ->login()
             ->colors([
                 'primary' => Color::Amber,

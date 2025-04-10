@@ -32,21 +32,30 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title.en')
-                    ->label('Title (EN)')
-                    ->required(),
-
                 TextInput::make('title.ka')
                     ->label('Title (GE)')
+                    ->required(),
+
+                TextInput::make('title.en')
+                    ->label(__('Title (EN)'))
+                    ->required(),
+
+                Textarea::make('short_description.ka')
+                    ->label('Short Description (GE)')
                     ->required(),
 
                 Textarea::make('short_description.en')
                     ->label('Short Description (EN)')
                     ->required(),
 
-                Textarea::make('short_description.ka')
-                    ->label('Short Description (GE)')
-                    ->required(),
+                TinyEditor::make('full_description.ge')
+                    ->label('Full Description (GE)')
+                    ->profile('default')
+                    ->columnSpanFull()
+                    ->minHeight(500)
+                    ->fileAttachmentsDisk('public')
+                    ->fileAttachmentsDirectory('uploads')
+                    ->fileAttachmentsVisibility('public'),
 
                 TinyEditor::make('full_description.en')
                     ->label('Full Description (EN)')
@@ -57,14 +66,6 @@ class EventResource extends Resource
                     ->fileAttachmentsDirectory('uploads')
                     ->fileAttachmentsVisibility('public'),
 
-                TinyEditor::make('full_description.ge')
-                    ->label('Full Description (GE)')
-                    ->profile('default')
-                    ->columnSpanFull()
-                    ->minHeight(500)
-                    ->fileAttachmentsDisk('public')
-                    ->fileAttachmentsDirectory('uploads')
-                    ->fileAttachmentsVisibility('public'),
 
                 TextInput::make('slug')
                     ->label('Slug')
@@ -88,6 +89,10 @@ class EventResource extends Resource
                 Toggle::make('publish')
                     ->label('Publish')
                     ->default(false),
+
+                Toggle::make('publish_main')
+                    ->label('Publish Main')
+                    ->default(false),
             ]);
     }
 
@@ -95,26 +100,9 @@ class EventResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title.en')
-                    ->label('Title (EN)')
-                    ->searchable(),
-
                 TextColumn::make('title.ka')
                     ->label('Title (GE)')
                     ->searchable(),
-
-                TextColumn::make('slug')
-                    ->label('Slug'),
-
-                TextColumn::make('short_description.en')
-                    ->label('Short Description (EN)'),
-
-                TextColumn::make('short_description.ka')
-                    ->label('Short Description (GE)'),
-
-                ImageColumn::make('image')
-                    ->label('Image')
-                    ->square(),
 
                 TextColumn::make('start_date')
                     ->label('Start Date')
@@ -155,5 +143,10 @@ class EventResource extends Resource
             'create' => Pages\CreateEvent::route('/create'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Event');
     }
 }

@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('slug',191)->nullable()->unique();
             $table->json('short_description')->nullable();
             $table->json('full_description')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image',191)->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->boolean('publish')->default(false);
+            $table->boolean('publish_main')->default(false);
             $table->integer('order')->default(0);
             $table->timestamps();
         });
