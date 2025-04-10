@@ -27,24 +27,24 @@ class MenuResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name.en')
-                    ->label('Menu Name (English)')
+                    ->label(__('Menu Name (English)'))
                     ->required(),
                 TextInput::make('name.ka')
-                    ->label('Menu Name (Georgian)')
+                    ->label(__('Menu Name (Georgian)'))
                     ->required(),
                 TextInput::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->disabled(),
                 TextInput::make('redirect_url')
-                    ->label('Redirect URL'),
+                    ->label(__('Redirect URL')),
                 Select::make('menu_type')
-                    ->label('Menu Type')
+                    ->label(__('Menu Type'))
                     ->options([
-                        'top' => 'Top Menu',
-                        'footer' => 'Footer Menu',
+                        'top' => __('Top Menu'),
+                        'footer' => __('Footer Menu'),
                     ]),
                 Select::make('parent_id')
-                    ->label('Parent Menu')
+                    ->label(__('Parent Menu'))
                     ->relationship(
                         'parent',
                         'name->en'
@@ -52,15 +52,15 @@ class MenuResource extends Resource
                     ->searchable()
                     ->preload()
                     ->nullable()
-                    ->placeholder('No Parent'),
+                    ->placeholder(__('No Parent')),
                 Select::make('contents')
                     ->relationship('contents', 'title') // Many-to-Many relation
                     ->multiple()
                     ->preload()
                     ->searchable()
-                    ->label('Content Items'),
+                    ->label(__('Content Items')),
                 CheckBox::make('publish')
-                    ->label('Publish'),
+                    ->label(__('Publish')),
             ]);
     }
 
@@ -71,27 +71,30 @@ class MenuResource extends Resource
             ->defaultSort('order')
             ->columns([
                 TextColumn::make('name.en')
-                    ->label('English Name')
+                    ->label(__('English Name'))
                     ->searchable(),
                 TextColumn::make('name.ka')
-                    ->label('Georgian Name')
+                    ->label(__('Georgian Name'))
                     ->searchable(),
                 TextColumn::make('parent.name.en')
-                    ->label('Parent Menu')
+                    ->label(__('Parent Menu'))
                     ->searchable(),
                 TextColumn::make('slug')
-                    ->label('Slug'),
+                    ->label(__('Slug')),
                 TextColumn::make('redirect_url')
-                    ->label('Redirect URL'),
+                    ->label(__('Redirect URL')),
                 TextColumn::make('contents.title')
-                    ->label('Related Contents')
+                    ->label(__('Related Contents'))
                     ->badge(),
                 ToggleColumn::make('publish')
-                    ->label('Publish')
+                    ->label(__('Publish'))
             ])
             ->filters([
                 SelectFilter::make('publish')
-                ->options([0,1]),
+                    ->options([
+                        0 => __('Unpublished'),
+                        1 => __('Published'),
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -118,5 +121,15 @@ class MenuResource extends Resource
             'create' => Pages\CreateMenu::route('/create'),
             'edit' => Pages\EditMenu::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Menu');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Menu');
     }
 }

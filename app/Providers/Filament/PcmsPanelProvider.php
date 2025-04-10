@@ -2,10 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\SetLocale;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -16,6 +18,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\App;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class PcmsPanelProvider extends PanelProvider
@@ -27,6 +30,18 @@ class PcmsPanelProvider extends PanelProvider
             ->id('pcms')
             ->path('pcms')
             ->brandName('Proservice')
+            ->userMenuItems([
+                MenuItem::make('Language')
+                    ->label(function () {
+                        return App::getLocale() === 'en' ? 'ქართული' : 'English';
+                    })
+                    ->url(function () {
+                        $targetLocale = App::getLocale() === 'en' ? 'ka' : 'en';
+                        return route('language.switch', ['locale' => $targetLocale]);
+                    })
+                    ->icon('heroicon-o-globe-alt')
+                    ->sort(5),
+            ])
             ->login()
             ->colors([
                 'primary' => Color::Amber,
@@ -51,6 +66,7 @@ class PcmsPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SetLocale::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

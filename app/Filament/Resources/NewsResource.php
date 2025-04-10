@@ -33,42 +33,43 @@ class NewsResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title.en')
-                    ->label('Title (EN)')
+                    ->label(__('Title (EN)'))
                     ->columnSpanFull()
                     ->required(),
                 TextInput::make('title.ka')
-                    ->label('Title (GE)')
+                    ->label(__('Title (GE)'))
                     ->columnSpanFull()
                     ->required(),
                 TextInput::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->disabled(),
                 DateTimePicker::make('publish_date')
-                    ->label('Publish Date')
+                    ->label(__('Publish Date'))
                     ->default(now())
                     ->native(false)
                     ->displayFormat('Y-m-d H:i'),
                 Textarea::make('description.en')
-                    ->label('Description (EN)')
+                    ->label(__('Description (EN)'))
                     ->columnSpanFull()
                     ->required(),
                 Textarea::make('description.ka')
-                    ->label('Description (GE)')
+                    ->label(__('Description (GE)'))
                     ->columnSpanFull()
                     ->required(),
                 FileUpload::make('image')
+                    ->label(__('Image'))
                     ->image()
                     ->disk('public')
                     ->directory('uploads/news_images'),
                 Select::make('categories')
                     ->visibleOn('create')
-                    ->label('Categories')
+                    ->label(__('Categories'))
                     ->multiple()
                     ->preload()
                     ->relationship('categories', 'name', fn (Builder $query) => $query->where('type', 'news'))
                     ->required(),
                 CheckBox::make('publish')
-                    ->label('Publish'),
+                ->label(__('Publish')),
             ]);
     }
 
@@ -79,27 +80,27 @@ class NewsResource extends Resource
             ->reorderable('order') // allows explicit drag-droppable sorting
             ->columns([
                 TextColumn::make('title.en')
-                    ->label('Title (EN)')
+                    ->label(__('Title (EN)'))
                     ->searchable(),
 
                 TextColumn::make('title.ka')
-                    ->label('Title (GE)')
+                    ->label(__('Title (GE)'))
                     ->searchable(),
 
                 TextColumn::make('slug')
-                    ->label('Slug'),
+                    ->label(__('Slug')),
 
                 ImageColumn::make('image')
-                    ->label('Featured Image')
+                    ->label(__('Featured Image'))
                     ->square(),
 
                 TextColumn::make('publish_date')
-                    ->label('Publish Date')
+                    ->label(__('Publish Date'))
                     ->dateTime('Y-m-d H:i'),
 
                 ToggleColumn::make('publish')
-                    ->label('Published'),
-                ])
+                    ->label(__('Published')),
+            ])
             ->filters([
                 //
             ])
@@ -130,5 +131,15 @@ class NewsResource extends Resource
             'create' => Pages\CreateNews::route('/create'),
             'edit' => Pages\EditNews::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('News');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('News');
     }
 }

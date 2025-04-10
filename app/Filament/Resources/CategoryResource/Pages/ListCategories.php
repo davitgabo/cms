@@ -24,11 +24,11 @@ class ListCategories extends ListRecords
     {
         return [
             'News' => Tab::make()
-                ->label('News')
+                ->label(__('News'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('type', 'news')),
 
             'Blog' => Tab::make()
-                ->label('Blog')
+                ->label(__('Blogs'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('type', 'blog')),
         ];
     }

@@ -29,19 +29,19 @@ class ContentResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')
-                    ->label('Title')
+                    ->label(__('Title'))
                     ->required(),
                 Select::make('menus')
-                    ->label('Menu')
+                    ->label(__('Menu'))
                     ->relationship('menus', 'name') // Many-to-Many relation with Menu
                     ->multiple()
                     ->searchable()
                     ->preload()
                     ->nullable()
-                    ->placeholder('No Menu')
+                    ->placeholder(__('No Menu'))
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name['en'] ?? ''),
                 TinyEditor::make('body')
-                    ->label('Body')
+                    ->label(__('Body'))
                     ->profile('default')
                     ->columnSpanFull()
                     ->minHeight(500)
@@ -55,10 +55,11 @@ class ContentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title')->sortable()->searchable(),
+                TextColumn::make('title')
+                    ->label(__('Title'))->sortable()->searchable(),
                 TextColumn::make('menus')
                     ->getStateUsing(fn ($record) => $record->menus->pluck('name.en'))
-                    ->label('Assigned Menus')
+                    ->label(__('Assigned Menus'))
                     ->badge(),
             ])
             ->filters([
@@ -88,5 +89,15 @@ class ContentResource extends Resource
             'create' => Pages\CreateContent::route('/create'),
             'edit' => Pages\EditContent::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Content');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Content');
     }
 }

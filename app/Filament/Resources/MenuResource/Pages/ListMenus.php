@@ -23,11 +23,11 @@ class ListMenus extends ListRecords
     {
         return [
             'top' => Tab::make()
-                ->label('Top')
+                ->label(__('Top'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('menu_type', 'top')),
 
             'footer' => Tab::make()
-                ->label('Footer')
+                ->label(__('Footer'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('menu_type', 'footer')),
         ];
     }

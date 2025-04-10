@@ -33,7 +33,7 @@ class EventResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title.ka')
-                    ->label('Title (GE)')
+                    ->label(__('Title (GE)'))
                     ->required(),
 
                 TextInput::make('title.en')
@@ -41,15 +41,15 @@ class EventResource extends Resource
                     ->required(),
 
                 Textarea::make('short_description.ka')
-                    ->label('Short Description (GE)')
+                    ->label(__('Short Description (GE)'))
                     ->required(),
 
                 Textarea::make('short_description.en')
-                    ->label('Short Description (EN)')
+                    ->label(__('Short Description (EN)'))
                     ->required(),
 
                 TinyEditor::make('full_description.ge')
-                    ->label('Full Description (GE)')
+                    ->label(__('Full Description (GE)'))
                     ->profile('default')
                     ->columnSpanFull()
                     ->minHeight(500)
@@ -58,7 +58,7 @@ class EventResource extends Resource
                     ->fileAttachmentsVisibility('public'),
 
                 TinyEditor::make('full_description.en')
-                    ->label('Full Description (EN)')
+                    ->label(__('Full Description (EN)'))
                     ->profile('default')
                     ->columnSpanFull()
                     ->minHeight(500)
@@ -66,32 +66,31 @@ class EventResource extends Resource
                     ->fileAttachmentsDirectory('uploads')
                     ->fileAttachmentsVisibility('public'),
 
-
                 TextInput::make('slug')
-                    ->label('Slug')
+                    ->label(__('Slug'))
                     ->disabled(),
 
                 FileUpload::make('image')
-                    ->label('Image')
+                    ->label(__('Image'))
                     ->required()
                     ->image()
                     ->directory('events/images'),
 
                 DatePicker::make('start_date')
-                    ->label('Start Date')
+                    ->label(__('Start Date'))
                     ->required(),
 
                 DatePicker::make('end_date')
-                    ->label('End Date')
+                    ->label(__('End Date'))
                     ->required()
                     ->afterOrEqual('start_date'),
 
                 Toggle::make('publish')
-                    ->label('Publish')
+                    ->label(__('Publish'))
                     ->default(false),
 
                 Toggle::make('publish_main')
-                    ->label('Publish Main')
+                    ->label(__('Publish Main'))
                     ->default(false),
             ]);
     }
@@ -101,19 +100,19 @@ class EventResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title.ka')
-                    ->label('Title (GE)')
+                    ->label(__('Title (GE)'))
                     ->searchable(),
 
                 TextColumn::make('start_date')
-                    ->label('Start Date')
+                    ->label(__('Start Date'))
                     ->dateTime('Y-m-d H:i'),
 
                 TextColumn::make('end_date')
-                    ->label('End Date')
+                    ->label(__('End Date'))
                     ->dateTime('Y-m-d H:i'),
 
                 ToggleColumn::make('publish')
-                    ->label('Published'),
+                    ->label(__('Published')),
             ])
             ->filters([
                 //
@@ -146,6 +145,11 @@ class EventResource extends Resource
     }
 
     public static function getNavigationLabel(): string
+    {
+        return __('Event');
+    }
+
+    public static function getModelLabel(): string
     {
         return __('Event');
     }

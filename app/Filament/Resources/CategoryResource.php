@@ -21,7 +21,6 @@ class CategoryResource extends Resource
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-//    protected static bool $shouldRegisterNavigation = false;
 
 
     public static function form(Form $form): Form
@@ -29,13 +28,13 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Name')
+                    ->label(__('Name'))
                     ->required(),
                 Select::make('type')
-                    ->label('Type')
+                    ->label(__('Type'))
                     ->options([
-                        'news' => 'News',
-                        'blog' => 'Blog'
+                        'news' => __('News'),
+                        'blog' => __('Blog')
                     ])
                     ->required(),
             ]);
@@ -46,10 +45,10 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Name')
+                    ->label(__('Name'))
                     ->searchable(),
                 TextColumn::make('type')
-                    ->label('Type'),
+                    ->label(__('Type')),
             ])
             ->filters([
                 //
@@ -79,5 +78,15 @@ class CategoryResource extends Resource
             'create' => Pages\CreateCategory::route('/create'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Category');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Category');
     }
 }
