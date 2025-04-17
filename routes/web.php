@@ -14,3 +14,7 @@ Route::get('/language/{locale}', function ($locale) {
     session(['locale' => $locale]);
     return redirect()->back();
 })->name('language.switch');
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});

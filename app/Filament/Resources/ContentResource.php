@@ -8,11 +8,11 @@ use App\Models\Content;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Components\ViewField;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class ContentResource extends Resource
 {
@@ -36,14 +36,15 @@ class ContentResource extends Resource
                     ->nullable()
                     ->placeholder(__('No Menu'))
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name['en'] ?? ''),
-                TinyEditor::make('body')
-                    ->label(__('Body'))
-                    ->profile('default')
+
+                ViewField::make('body')
+                    ->view('filament.tiny-editor')
+                    ->label('Body')
                     ->columnSpanFull()
-                    ->minHeight(500)
-                    ->fileAttachmentsDisk('public')
-                    ->fileAttachmentsDirectory('uploads')
-                    ->fileAttachmentsVisibility('public'),
+                    ->viewData([
+                        'name' => 'body',
+                        'value' => $form->getRecord() ?$form->getRecord()->body : '',
+                    ]),
             ]);
     }
 
