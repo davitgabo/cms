@@ -75,6 +75,14 @@ class Menu extends Model
             $menu->saveQuietly();
         });
 
+        static::saved(function ($menu) {
+            if ($menu->is_homepage) {
+                Menu::where('id', '!=', $menu->id)
+                    ->where('is_homepage', true)
+                    ->update(['is_homepage' => false]);
+            }
+        });
+
     }
 
     public function scopePublished($query)
