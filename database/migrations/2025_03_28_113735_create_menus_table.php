@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('description',191)->nullable();
             $table->string('meta_tags',191)->nullable();
             $table->string('menu_type',45);
+            $table->string('background_image',191)->nullable();
+            $table->boolean('is_homepage')->default(false);
             $table->boolean('publish');
             $table->integer('order')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('menus')->cascadeOnDelete();

@@ -6,6 +6,7 @@ use App\Filament\Resources\MenuResource\Pages;
 use App\Filament\Resources\MenuResource\RelationManagers;
 use App\Models\Menu;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -65,6 +66,19 @@ class MenuResource extends Resource
                     ->preload()
                     ->searchable()
                     ->label(__('Module Items')),
+                FileUpload::make('background_image')
+                    ->label(__('Background Image'))
+                    ->image()
+                    ->columnSpanFull()
+                    ->disk('public')
+                    ->directory('uploads/news_images'),
+                CheckBox::make('is_homepage')
+                    ->label(__('Homepage'))
+                    ->afterStateUpdated(function ($state, $record) {
+                        if ($state) {
+                            Menu::where('id', '!=', $record?->id)->update(['is_homepage' => false]);
+                        }
+                    }),
                 CheckBox::make('publish')
                     ->label(__('Publish')),
             ]);
