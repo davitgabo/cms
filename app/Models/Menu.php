@@ -38,6 +38,11 @@ class Menu extends Model
         return $this->belongsToMany(Content::class, 'menu_content');
     }
 
+    public function modules()
+    {
+        return $this->belongsToMany(Module::class);
+    }
+
     public static function scopeTree($query)
     {
         return $query->with('children')->whereNull('parent_id')->orderBy('order');

@@ -59,6 +59,12 @@ class MenuResource extends Resource
                     ->preload()
                     ->searchable()
                     ->label(__('Content Items')),
+                Select::make('modules')
+                    ->relationship('modules', 'title') // Many-to-Many relation
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->label(__('Module Items')),
                 CheckBox::make('publish')
                     ->label(__('Publish')),
             ]);
@@ -85,6 +91,9 @@ class MenuResource extends Resource
                     ->label(__('Redirect URL')),
                 TextColumn::make('contents.title')
                     ->label(__('Related Contents'))
+                    ->badge(),
+                TextColumn::make('modules.title')
+                    ->label(__('Related Menus'))
                     ->badge(),
                 ToggleColumn::make('publish')
                     ->label(__('Publish'))
