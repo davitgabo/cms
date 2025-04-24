@@ -77,5 +77,8 @@ class Menu extends Model
 
     }
 
-
+    public function scopePublished($query)
+    {
+        return $query->where('publish', true);
+    }
 }
