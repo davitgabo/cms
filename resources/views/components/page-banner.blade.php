@@ -1,5 +1,5 @@
 <section class="banner other-content">
-    @if($image && file_exists(public_path('storage/' . $image)))
+    @if($image))
         <img src="{{ asset('storage/' . $image) }}" alt="banner">
     @endif
     <p>{{ $title }}</p>
