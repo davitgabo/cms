@@ -3,14 +3,23 @@
 @section('title', $page->name['ka'])
 
 @section('content')
+    @if(!$page->contents->isEmpty())
     <x-page-banner :image="$page->background_image" :title="$page->name['ka']" />
+    @endif
 
     @foreach($page->contents as $content)
         <x-content-card :content="$content" />
     @endforeach
 
-{{--    @foreach($page->modules as $module)--}}
-{{--        <x-module-card :module="$module" />--}}
-{{--    @endforeach--}}
-
+    @if($page->has('modules'))
+        @foreach($page->modules as $module)
+            <section class="Container1 other-content">
+                <div class="content">
+                    <div class="product-grid">
+                        <x-module-card :module="$module->title" />
+                    </div>
+                </div>
+            </section>
+        @endforeach
+    @endif
 @endsection
