@@ -16,7 +16,7 @@ class ViewController extends Controller
                 abort(404);
             }
         } else {
-            $page = Menu::with('contents')->orderBy('order')->first();
+            $page = Menu::where('is_homepage',true)->with('contents')->first();
         }
 
         $menus = Menu::published()->orderBy('order')->get();
