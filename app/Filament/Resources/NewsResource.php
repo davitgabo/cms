@@ -60,7 +60,7 @@ class NewsResource extends Resource
                     ->label(__('Image'))
                     ->image()
                     ->disk('public')
-                    ->directory('uploads/menu_images'),
+                    ->directory('uploads/news_images'),
                 Select::make('categories')
                     ->visibleOn('create')
                     ->label(__('Categories'))

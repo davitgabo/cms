@@ -71,7 +71,7 @@ class MenuResource extends Resource
                     ->image()
                     ->columnSpanFull()
                     ->disk('public')
-                    ->directory('uploads/news_images'),
+                    ->directory('uploads/menu_images'),
                 CheckBox::make('is_homepage')
                     ->label(__('Homepage'))
                     ->afterStateUpdated(function ($state, $record) {
