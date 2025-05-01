@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\NewsResource\RelationManagers;
 
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -18,7 +19,10 @@ class CategoriesRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('name_ka')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('name_en')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Hidden::make('type')->default('news'),
@@ -28,9 +32,10 @@ class CategoriesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('name')
+            ->recordTitleAttribute('name_ka')
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('name_ka')
+                    ->label('Name'),
             ])
             ->filters([
                 //

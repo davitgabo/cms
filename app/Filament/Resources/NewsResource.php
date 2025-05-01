@@ -66,7 +66,7 @@ class NewsResource extends Resource
                     ->label(__('Categories'))
                     ->multiple()
                     ->preload()
-                    ->relationship('categories', 'name', fn (Builder $query) => $query->where('type', 'news'))
+                    ->relationship('categories', 'name_ka', fn (Builder $query) => $query->where('type', 'news'))
                     ->required(),
                 CheckBox::make('publish')
                 ->label(__('Publish')),
