@@ -43,6 +43,8 @@ class ContentResource extends Resource
                     ->columnSpanFull()
                     ->viewData([
                         'name' => 'body',
+                        'nameId' => 'body',
+                        'livewireFieldPath' => 'data.body',
                         'value' => $form->getRecord() ?$form->getRecord()->body : '',
                     ]),
             ]);

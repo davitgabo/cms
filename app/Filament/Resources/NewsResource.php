@@ -32,12 +32,12 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title.en')
-                    ->label(__('Title (EN)'))
-                    ->columnSpanFull()
-                    ->required(),
                 TextInput::make('title.ka')
                     ->label(__('Title (GE)'))
+                    ->columnSpanFull()
+                    ->required(),
+                TextInput::make('title.en')
+                    ->label(__('Title (EN)'))
                     ->columnSpanFull()
                     ->required(),
                 TextInput::make('slug')
@@ -48,12 +48,12 @@ class NewsResource extends Resource
                     ->default(now())
                     ->native(false)
                     ->displayFormat('Y-m-d H:i'),
-                Textarea::make('description.en')
-                    ->label(__('Description (EN)'))
-                    ->columnSpanFull()
-                    ->required(),
                 Textarea::make('description.ka')
                     ->label(__('Description (GE)'))
+                    ->columnSpanFull()
+                    ->required(),
+                Textarea::make('description.en')
+                    ->label(__('Description (EN)'))
                     ->columnSpanFull()
                     ->required(),
                 FileUpload::make('image')
@@ -79,16 +79,9 @@ class NewsResource extends Resource
             ->defaultSort('order', 'asc') // explicitly sorting by 'order'
             ->reorderable('order') // allows explicit drag-droppable sorting
             ->columns([
-                TextColumn::make('title.en')
-                    ->label(__('Title (EN)'))
-                    ->searchable(),
-
                 TextColumn::make('title.ka')
                     ->label(__('Title (GE)'))
                     ->searchable(),
-
-                TextColumn::make('slug')
-                    ->label(__('Slug')),
 
                 ImageColumn::make('image')
                     ->label(__('Featured Image'))

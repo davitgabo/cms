@@ -1,14 +1,18 @@
 <div wire:ignore>
-    <textarea id="tiny-{{ $name }}" name="{{ $name }}">{!! old($name, $value) !!}</textarea>
+    <textarea id="tiny-{{ $nameId }}" name="{{ $name }}">{{ old($name, $value) }}</textarea>
 </div>
 
 <script src="https://cdn.tiny.cloud/1/myncqh8aqgr9s8wqyp4mc0f7n75fmr6p0elix7zck5z8jy61/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const selector = '#tiny-{{ $name }}';
+        // Create a safe selector ID by replacing dots with underscores
+        const selectorId = '{{ $nameId }}';
+        const selector = '#tiny-' + selectorId;
+        const fieldName = '{{ $name }}';
+        const livewireFieldPath = '{{ $livewireFieldPath }}';
 
-        if (tinymce.get(selector)) {
-            tinymce.get(selector).remove();
+        if (tinymce.get(selector.substring(1))) {
+            tinymce.get(selector.substring(1)).remove();
         }
 
         tinymce.init({
@@ -52,11 +56,12 @@
                 });
 
                 editor.on('change keyup blur', function () {
-                    // This is the key change - we need to update Livewire with the current content
-                    editor.save(); // Save content to the original textarea
+                    // Save content to the original textarea
+                    editor.save();
 
                     // Dispatch a Livewire set event with the updated content
-                @this.set('data.{{ $name }}', editor.getContent());
+                    // Using the proper path for the JSON field
+                @this.set(livewireFieldPath, editor.getContent());
                 });
             }
         });

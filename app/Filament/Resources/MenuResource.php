@@ -27,11 +27,11 @@ class MenuResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name.en')
-                    ->label(__('Menu Name (English)'))
-                    ->required(),
                 TextInput::make('name.ka')
                     ->label(__('Menu Name (Georgian)'))
+                    ->required(),
+                TextInput::make('name.en')
+                    ->label(__('Menu Name (English)'))
                     ->required(),
                 TextInput::make('slug')
                     ->label(__('Slug'))
@@ -90,9 +90,6 @@ class MenuResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->columns([
-                TextColumn::make('name.en')
-                    ->label(__('English Name'))
-                    ->searchable(),
                 TextColumn::make('name.ka')
                     ->label(__('Georgian Name'))
                     ->searchable(),

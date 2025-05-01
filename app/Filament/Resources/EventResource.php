@@ -11,6 +11,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -48,23 +49,27 @@ class EventResource extends Resource
                     ->label(__('Short Description (EN)'))
                     ->required(),
 
-                TinyEditor::make('full_description.ge')
+                ViewField::make('full_description.ka')
+                    ->view('filament.tiny-editor')
                     ->label(__('Full Description (GE)'))
-                    ->profile('default')
                     ->columnSpanFull()
-                    ->minHeight(500)
-                    ->fileAttachmentsDisk('public')
-                    ->fileAttachmentsDirectory('uploads')
-                    ->fileAttachmentsVisibility('public'),
+                    ->viewData([
+                        'name' => 'full_description[ka]', // Use array syntax for name attribute
+                        'nameId' => 'full_description_ka', // Safe ID for DOM element
+                        'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
+                        'value' => $form->getRecord() ? $form->getRecord()->full_description['ge'] : '',
+                    ]),
 
-                TinyEditor::make('full_description.en')
+                ViewField::make('full_description.en')
+                    ->view('filament.tiny-editor')
                     ->label(__('Full Description (EN)'))
-                    ->profile('default')
                     ->columnSpanFull()
-                    ->minHeight(500)
-                    ->fileAttachmentsDisk('public')
-                    ->fileAttachmentsDirectory('uploads')
-                    ->fileAttachmentsVisibility('public'),
+                    ->viewData([
+                        'name' => 'full_description[en]', // Use array syntax for name attribute
+                        'nameId' => 'full_description_en', // Safe ID for DOM element
+                        'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
+                        'value' => $form->getRecord() ? $form->getRecord()->full_description['en'] : '',
+                    ]),
 
                 TextInput::make('slug')
                     ->label(__('Slug'))

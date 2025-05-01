@@ -27,8 +27,11 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->label(__('Name'))
+                TextInput::make('name.ka')
+                    ->label(__('Name (GE)'))
+                    ->required(),
+                TextInput::make('name.en')
+                    ->label(__('Name (EN)'))
                     ->required(),
                 Select::make('type')
                     ->label(__('Type'))
@@ -44,7 +47,7 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('name.ka')
                     ->label(__('Name'))
                     ->searchable(),
                 TextColumn::make('type')
