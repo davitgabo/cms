@@ -103,6 +103,8 @@ class EventResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('order','asc')
+            ->reorderable('order')
             ->columns([
                 TextColumn::make('title.ka')
                     ->label(__('Title (GE)'))

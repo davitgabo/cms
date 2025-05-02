@@ -14,6 +14,17 @@ class Event extends Model
         'full_description' => 'array',
         'publish' => 'boolean',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (Event $event) {
+            if (!$event->order) {
+                $event->order = Event::max('order') + 1;
+            }
+        });
+    }
     protected static function booted()
     {
         static::created(function (Event $event) {

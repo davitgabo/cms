@@ -16,7 +16,7 @@ class Menu extends Model
     {
         parent::boot();
 
-        static::creating(function ($menu) {
+        static::creating(function (Menu $menu) {
             if (!$menu->order) {
                 $menu->order = Menu::max('order') + 1;
             }

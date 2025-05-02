@@ -13,6 +13,17 @@ class News extends Model
         'description' => 'array',
         'publish' => 'boolean',
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (News $news) {
+            if (!$news->order) {
+                $news->order = News::max('order') + 1;
+            }
+        });
+    }
+
     protected static function booted()
     {
         static::created(function (News $news) {
