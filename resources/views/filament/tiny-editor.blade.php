@@ -24,7 +24,7 @@
             block_formats: 'Paragraph=p; Header 1=h1; Header 2=h2; Header 3=h3; Preformatted=pre',
             file_picker_callback: function (callback, value, meta) {
                 // Set the URL to open Laravel File Manager
-                let route_prefix = '/laravel-filemanager'; // Adjust based on your route
+                let route_prefix = '/filemanager'; // Adjust based on your route
                 let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
                 let y = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
 

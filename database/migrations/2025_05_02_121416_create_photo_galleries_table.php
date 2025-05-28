@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sliders', function (Blueprint $table) {
+        Schema::create('photo_galleries', function (Blueprint $table) {
             $table->id();
             $table->json('title');
-            $table->string('url')->nullable();
-            $table->string('image',191)->nullable();
+            $table->string('cover_image');
             $table->boolean('publish')->default(false);
             $table->integer('order')->default(0);
             $table->timestamps();
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sliders');
+        Schema::dropIfExists('photo_galleries');
     }
 };
