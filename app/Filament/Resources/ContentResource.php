@@ -4,11 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContentResource\Pages;
 use App\Filament\Resources\ContentResource\RelationManagers;
+use App\Helpers\LanguageHelper;
 use App\Models\Content;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Components\ViewField;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -24,6 +26,18 @@ class ContentResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('language')
+                    ->label('Language')
+                    ->options(LanguageHelper::options())
+                    ->dehydrated(false)
+                    ->reactive()
+                    ->afterStateUpdated(function ($state) {
+                        session(['language' => $state]);
+                    })
+                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null)
+                    ->extraAttributes([
+                        '@change' => 'document.dispatchEvent(new CustomEvent("language-changed", { detail: { language: $event.target.value } }))'
+                    ]),
                 TextInput::make('title')
                     ->label(__('Title'))
                     ->required(),
@@ -37,16 +51,29 @@ class ContentResource extends Resource
                     ->placeholder(__('No Menu'))
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name['en'] ?? ''),
 
-                ViewField::make('body')
+                ViewField::make('body.ka')
                     ->view('filament.tiny-editor')
                     ->label('Body')
                     ->columnSpanFull()
                     ->viewData([
-                        'name' => 'body',
-                        'nameId' => 'body',
-                        'livewireFieldPath' => 'data.body',
-                        'value' => $form->getRecord() ?$form->getRecord()->body : '',
-                    ]),
+                        'name' => 'body[ka]',
+                        'nameId' => 'body_ka',
+                        'livewireFieldPath' => 'data.body.ka',
+                        'value' => $form->getRecord() ? ($form->getRecord()->body['ka'] ?? '') : '',
+                    ])
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
+
+                ViewField::make('body.en')
+                    ->view('filament.tiny-editor')
+                    ->label('Body')
+                    ->columnSpanFull()
+                    ->viewData([
+                        'name' => 'body[en]',
+                        'nameId' => 'body_en',
+                        'livewireFieldPath' => 'data.body.en',
+                        'value' => $form->getRecord() ? ($form->getRecord()->body['en'] ?? '') : '',
+                    ])
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
             ]);
     }
 

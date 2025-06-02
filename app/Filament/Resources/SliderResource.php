@@ -5,12 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SliderResource\Pages;
 use App\Filament\Resources\SliderResource\RelationManagers;
 use App\Forms\Components\FileManagerPicker;
+use App\Helpers\LanguageHelper;
 use App\Models\Slider;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
@@ -30,14 +33,25 @@ class SliderResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('language')
+                    ->label('Language')
+                    ->options(LanguageHelper::options())
+                    ->dehydrated(false)
+                    ->reactive()
+                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
+
                 TextInput::make('title.ka')
                     ->label(__('Title (GE)'))
                     ->columnSpanFull()
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'ge')
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
+
                 TextInput::make('title.en')
                     ->label(__('Title (EN)'))
                     ->columnSpanFull()
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'en')
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+
                 TextInput::make('url')
                     ->label(__('URL'))
                     ->columnSpanFull(),

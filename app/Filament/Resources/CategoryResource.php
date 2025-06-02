@@ -4,11 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use App\Helpers\LanguageHelper;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -27,12 +29,19 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('language')
+                    ->label('Language')
+                    ->options(LanguageHelper::options())
+                    ->dehydrated(false)
+                    ->reactive()
+                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
                 TextInput::make('name_ka')
                     ->label(__('Name (GE)'))
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'ge')
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
                 TextInput::make('name_en')
                     ->label(__('Name (EN)'))
-                    ->required(),
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
                 Select::make('type')
                     ->label(__('Type'))
                     ->options([

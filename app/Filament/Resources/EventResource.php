@@ -4,15 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource\RelationManagers;
+use App\Helpers\LanguageHelper;
 use App\Models\Event;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ImageColumn;
@@ -33,21 +36,38 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('language')
+                    ->label('Language')
+                    ->options(LanguageHelper::options())
+                    ->dehydrated(false)
+                    ->reactive()
+                    ->afterStateUpdated(function ($state) {
+                        session(['language' => $state]);
+                    })
+                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null)
+                    ->extraAttributes([
+                        '@change' => 'document.dispatchEvent(new CustomEvent("language-changed", { detail: { language: $event.target.value } }))'
+                    ]),
+
                 TextInput::make('title.ka')
                     ->label(__('Title (GE)'))
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'ge')
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
 
                 TextInput::make('title.en')
                     ->label(__('Title (EN)'))
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'en')
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
 
                 Textarea::make('short_description.ka')
                     ->label(__('Short Description (GE)'))
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'ge')
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
 
                 Textarea::make('short_description.en')
                     ->label(__('Short Description (EN)'))
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'en')
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
 
                 ViewField::make('full_description.ka')
                     ->view('filament.tiny-editor')
@@ -57,8 +77,9 @@ class EventResource extends Resource
                         'name' => 'full_description[ka]', // Use array syntax for name attribute
                         'nameId' => 'full_description_ka', // Safe ID for DOM element
                         'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
-                        'value' => $form->getRecord() ? $form->getRecord()->full_description['ge'] : '',
-                    ]),
+                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
+                    ])
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
 
                 ViewField::make('full_description.en')
                     ->view('filament.tiny-editor')
@@ -68,8 +89,10 @@ class EventResource extends Resource
                         'name' => 'full_description[en]', // Use array syntax for name attribute
                         'nameId' => 'full_description_en', // Safe ID for DOM element
                         'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
-                        'value' => $form->getRecord() ? $form->getRecord()->full_description['en'] : '',
-                    ]),
+                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
+                    ])
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+
 
                 TextInput::make('slug')
                     ->label(__('Slug'))

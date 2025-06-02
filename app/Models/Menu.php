@@ -2,15 +2,22 @@
 
 namespace App\Models;
 
+use App\Contracts\HasMultilingualFields;
+use App\Observers\MultilingualFieldsObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Menu extends Model
+class Menu extends Model implements HasMultilingualFields
 {
     protected $casts = [
         'name' => 'array',
         'publish' => 'boolean',
     ];
+
+    public static function getMultilingualFields(): array
+    {
+        return ['name'];
+    }
 
     protected static function boot()
     {
@@ -63,19 +70,15 @@ class Menu extends Model
 
     protected static function booted()
     {
-        static::created(function (Menu $menu) {
-            // For newly created menus, id is now guaranteed
-            $menu->slug = Str::slug($menu->name['ka']) . '-' . $menu->id;
-            $menu->saveQuietly();
-        });
-
-        static::updated(function (Menu $menu) {
-            // On update, id is guaranteed, refresh slug
-            $menu->slug = Str::slug($menu->name['ka']) . '-' . $menu->id;
-            $menu->saveQuietly();
-        });
+        static::observe(MultilingualFieldsObserver::class);
 
         static::saved(function ($menu) {
+            $expectedSlug = Str::slug($menu->name['ka']) . '-' . $menu->id;
+            if ($menu->slug !== $expectedSlug) {
+                $menu->slug = $expectedSlug;
+                $menu->saveQuietly();
+            }
+
             if ($menu->is_homepage) {
                 Menu::where('id', '!=', $menu->id)
                     ->where('is_homepage', true)

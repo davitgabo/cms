@@ -4,12 +4,15 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PhotoGalleryResource\Pages;
 use App\Filament\Resources\PhotoGalleryResource\RelationManagers;
+use App\Helpers\LanguageHelper;
 use App\Models\PhotoGallery;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,19 +29,31 @@ class PhotoGalleryResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('language')
+                    ->label('Language')
+                    ->options(LanguageHelper::options())
+                    ->dehydrated(false)
+                    ->reactive()
+                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
+
                 TextInput::make('title.ka')
                     ->label(__('Title (GE)'))
                     ->columnSpanFull()
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'ge')
+                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
+
                 TextInput::make('title.en')
                     ->label(__('Title (EN)'))
                     ->columnSpanFull()
-                    ->required(),
+                    ->required(fn (Get $get) => $get('language') === 'en')
+                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+
                 FileUpload::make('image')
                     ->label(__('Image'))
                     ->image()
                     ->disk('public')
                     ->directory('uploads/photo_gallery/cover_images'),
+
                 CheckBox::make('publish')
                     ->label(__('Publish')),
             ]);
