@@ -16,6 +16,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
 
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+
+    <!-- Video.js JS -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 

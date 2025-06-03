@@ -3,6 +3,9 @@
 @section('title', $page->name['ka'])
 
 @section('content')
+    @php
+        $video = \App\Models\VideoGallery::whereNotNull('video')->first();
+    @endphp
     @if(!$page->contents->isEmpty())
     <x-page-banner :image="$page->background_image" :title="$page->name['ka']" />
     @endif
@@ -22,4 +25,7 @@
             </section>
         @endforeach
     @endif
+    <section class="Container1 other-content">
+        <x-video-card :video="$video"/>
+    </section>
 @endsection
