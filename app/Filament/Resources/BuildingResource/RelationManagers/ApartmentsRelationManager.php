@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\BuildingResource\RelationManagers;
 
+use App\Enums\ApartmentStatus;
 use App\Helpers\LanguageHelper;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
@@ -61,6 +62,32 @@ class ApartmentsRelationManager extends RelationManager
                     ->label(__('Coordinates'))
                     ->required()
                     ->maxLength(255),
+
+                TextInput::make('total_space')
+                    ->numeric()
+                    ->step(0.1)
+                    ->minValue(0)
+                    ->maxValue(1000)
+                    ->required(),
+
+                TextInput::make('bedrooms')
+                    ->numeric()
+                    ->step(1)
+                    ->minValue(0)
+                    ->maxValue(10)
+                    ->required(),
+
+                Select::make('status')
+                    ->options(ApartmentStatus::class)
+                    ->default(ApartmentStatus::FREE),
+
+                TextInput::make('price')
+                    ->numeric()
+                    ->prefix('$')
+                    ->step(0.01)
+                    ->minValue(0)
+                    ->placeholder('0.00')
+                    ->required()
             ]);
     }
 

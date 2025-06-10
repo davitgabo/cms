@@ -22,6 +22,10 @@ return new class extends Migration
             $table->json('title');
             $table->string('image')->nullable();
             $table->string('coordinates');
+            $table->string('status', 20)->default('free');
+            $table->float('total_space')->nullable();
+            $table->integer('bedrooms')->nullable();
+            $table->float('price')->nullable();
             $table->timestamps();
         });
     }
