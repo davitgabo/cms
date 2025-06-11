@@ -109,4 +109,14 @@ class SliderResource extends Resource
             'edit' => Pages\EditSlider::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Slider');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Slider');
+    }
 }

@@ -107,4 +107,14 @@ class BuildingResource extends Resource
             'edit' => Pages\EditBuilding::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Building');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Building');
+    }
 }

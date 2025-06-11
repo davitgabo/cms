@@ -129,4 +129,14 @@ class VideoGalleryResource extends Resource
             'edit' => Pages\EditVideoGallery::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Video Gallery');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Video Gallery');
+    }
 }

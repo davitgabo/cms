@@ -101,4 +101,14 @@ class PhotoGalleryResource extends Resource
             'edit' => Pages\EditPhotoGallery::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Photo Gallery');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('Photo Gallery');
+    }
 }

@@ -127,7 +127,7 @@ class EventResource extends Resource
                     ->dateTime('Y-m-d H:i'),
 
                 ToggleColumn::make('publish')
-                    ->label(__('Published')),
+                    ->label(__('Publish')),
             ])
             ->filters([
                 //
