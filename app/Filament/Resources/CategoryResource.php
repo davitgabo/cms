@@ -8,7 +8,10 @@ use App\Helpers\LanguageHelper;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
@@ -29,19 +32,20 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
-                TextInput::make('name_ka')
-                    ->label(__('Name (GE)'))
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-                TextInput::make('name_en')
-                    ->label(__('Name (EN)'))
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                TextInput::make('name_ka')
+                                    ->label('სახელი')
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                TextInput::make('name_en')
+                                    ->label('Name')
+                            ]),
+                    ])->columnSpan(2),
+
                 Select::make('type')
                     ->label(__('Type'))
                     ->options([

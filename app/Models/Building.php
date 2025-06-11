@@ -2,26 +2,14 @@
 
 namespace App\Models;
 
-use App\Contracts\HasMultilingualFields;
-use App\Observers\MultilingualFieldsObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Building extends Model implements HasMultilingualFields
+class Building extends Model
 {
     protected $casts = [
         'title' => 'array',
     ];
-
-    public static function getMultilingualFields(): array
-    {
-        return ['title'];
-    }
-
-    protected static function booted(): void
-    {
-        static::observe(MultilingualFieldsObserver::class);
-    }
 
     public function floors(): HasMany
     {

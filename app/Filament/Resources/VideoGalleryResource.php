@@ -10,6 +10,8 @@ use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -32,35 +34,29 @@ class VideoGalleryResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
-
-                TextInput::make('title.ka')
-                    ->label(__('Title (GE)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                TextInput::make('title.en')
-                    ->label(__('Title (EN)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') === 'en')
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
-
-                Textarea::make('description.ka')
-                    ->label(__('Description (GE)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') !== 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                Textarea::make('description.en')
-                    ->label(__('Description (EN)'))
-                    ->columnSpanFull()
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                TextInput::make('title.ka')
+                                    ->label('სახელი')
+                                    ->required()
+                                    ->columnSpanFull(),
+                                Textarea::make('description.ka')
+                                    ->label('აღწერა')
+                                    ->columnSpanFull()
+                                    ->required(),
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                TextInput::make('title.en')
+                                    ->label('Name')
+                                    ->columnSpanFull(),
+                                Textarea::make('description.en')
+                                    ->label('Description')
+                                    ->columnSpanFull(),
+                            ]),
+                    ])->columnSpan(2),
 
                 TextInput::make('youtube_url')
                     ->label(__('Youtube LINK'))

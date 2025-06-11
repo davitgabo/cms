@@ -9,6 +9,8 @@ use App\Models\Menu;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -29,22 +31,20 @@ class MenuResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
-
-                TextInput::make('name.ka')
-                    ->label(__('Menu Name (Georgian)'))
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                TextInput::make('name.en')
-                    ->label(__('Menu Name (English)'))
-                    ->required(fn (Get $get) => $get('language') === 'en')
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                TextInput::make('name.ka')
+                                    ->label('სახელი')
+                                    ->required(),
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                TextInput::make('name.en')
+                                    ->label('Name'),
+                            ]),
+                    ])->columnSpan(2),
 
                 TextInput::make('slug')
                     ->label(__('Slug'))

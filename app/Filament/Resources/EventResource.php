@@ -10,6 +10,8 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -36,63 +38,46 @@ class EventResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateUpdated(function ($state) {
-                        session(['language' => $state]);
-                    })
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null)
-                    ->extraAttributes([
-                        '@change' => 'document.dispatchEvent(new CustomEvent("language-changed", { detail: { language: $event.target.value } }))'
-                    ]),
-
-                TextInput::make('title.ka')
-                    ->label(__('Title (GE)'))
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                TextInput::make('title.en')
-                    ->label(__('Title (EN)'))
-                    ->required(fn (Get $get) => $get('language') === 'en')
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
-
-                Textarea::make('short_description.ka')
-                    ->label(__('Short Description (GE)'))
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                Textarea::make('short_description.en')
-                    ->label(__('Short Description (EN)'))
-                    ->required(fn (Get $get) => $get('language') === 'en')
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
-
-                ViewField::make('full_description.ka')
-                    ->view('filament.tiny-editor')
-                    ->label(__('Full Description (GE)'))
-                    ->columnSpanFull()
-                    ->viewData([
-                        'name' => 'full_description[ka]', // Use array syntax for name attribute
-                        'nameId' => 'full_description_ka', // Safe ID for DOM element
-                        'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
-                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
-                    ])
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                ViewField::make('full_description.en')
-                    ->view('filament.tiny-editor')
-                    ->label(__('Full Description (EN)'))
-                    ->columnSpanFull()
-                    ->viewData([
-                        'name' => 'full_description[en]', // Use array syntax for name attribute
-                        'nameId' => 'full_description_en', // Safe ID for DOM element
-                        'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
-                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
-                    ])
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
-
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                TextInput::make('title.ka')
+                                    ->label('სათაური')
+                                    ->required()
+                                    ->maxLength(255),
+                                Textarea::make('short_description.ka')
+                                    ->label('მოკლე აღწერა'),
+                                ViewField::make('full_description.ka')
+                                    ->view('filament.tiny-editor')
+                                    ->label('სრული ტექსტი')
+                                    ->columnSpanFull()
+                                    ->viewData([
+                                        'name' => 'full_description[ka]', // Use array syntax for name attribute
+                                        'nameId' => 'full_description_ka', // Safe ID for DOM element
+                                        'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
+                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
+                                    ]),
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                TextInput::make('title.en')
+                                    ->label('Title')
+                                    ->maxLength(255),
+                                Textarea::make('short_description.en')
+                                    ->label('Short Description'),
+                                ViewField::make('full_description.en')
+                                    ->view('filament.tiny-editor')
+                                    ->label('Full Description (EN)')
+                                    ->columnSpanFull()
+                                    ->viewData([
+                                        'name' => 'full_description[en]', // Use array syntax for name attribute
+                                        'nameId' => 'full_description_en', // Safe ID for DOM element
+                                        'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
+                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
+                                    ]),
+                            ]),
+                    ])->columnSpan(2),
 
                 TextInput::make('slug')
                     ->label(__('Slug'))

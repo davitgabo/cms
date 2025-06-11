@@ -10,6 +10,8 @@ use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -29,24 +31,20 @@ class PhotoGalleryResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null),
-
-                TextInput::make('title.ka')
-                    ->label(__('Title (GE)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                TextInput::make('title.en')
-                    ->label(__('Title (EN)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') === 'en')
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                TextInput::make('title.ka')
+                                    ->label('სახელი')
+                                    ->required(),
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                TextInput::make('title.en')
+                                    ->label('Name'),
+                            ]),
+                    ])->columnSpan(2),
 
                 FileUpload::make('image')
                     ->label(__('Image'))

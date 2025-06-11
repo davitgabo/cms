@@ -2,17 +2,13 @@
 
 namespace App\Models;
 
-use App\Contracts\HasMultilingualFields;
-use App\Observers\MultilingualFieldsObserver;
-use App\Traits\DefaultMultilingualFields;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-class News extends Model implements HasMultilingualFields
+class News extends Model
 {
-    use DefaultMultilingualFields;
     protected $casts = [
         'title' => 'array',
         'short_description' => 'array',
@@ -32,8 +28,6 @@ class News extends Model implements HasMultilingualFields
 
     protected static function booted()
     {
-        static::observe(MultilingualFieldsObserver::class);
-
         static::saved(function (News $news) {
             // For newly created menus, id is now guaranteed
             $news->slug = 'news/' . Str::slug($news->title['ka']) . '-' . $news->id;

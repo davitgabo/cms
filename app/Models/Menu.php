@@ -2,22 +2,15 @@
 
 namespace App\Models;
 
-use App\Contracts\HasMultilingualFields;
-use App\Observers\MultilingualFieldsObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Menu extends Model implements HasMultilingualFields
+class Menu extends Model
 {
     protected $casts = [
         'name' => 'array',
         'publish' => 'boolean',
     ];
-
-    public static function getMultilingualFields(): array
-    {
-        return ['name'];
-    }
 
     protected static function boot()
     {
@@ -70,8 +63,6 @@ class Menu extends Model implements HasMultilingualFields
 
     protected static function booted()
     {
-        static::observe(MultilingualFieldsObserver::class);
-
         static::saved(function ($menu) {
             $expectedSlug = Str::slug($menu->name['ka']) . '-' . $menu->id;
             if ($menu->slug !== $expectedSlug) {

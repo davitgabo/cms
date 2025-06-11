@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
-use App\Contracts\HasMultilingualFields;
-use App\Observers\MultilingualFieldsObserver;
-use App\Traits\DefaultMultilingualFields;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class Event extends Model implements HasMultilingualFields
+class Event extends Model
 {
-    use DefaultMultilingualFields;
     protected $casts = [
         'title' => 'array',
         'short_description' => 'array',
@@ -31,8 +27,6 @@ class Event extends Model implements HasMultilingualFields
     }
     protected static function booted()
     {
-        static::observe(MultilingualFieldsObserver::class);
-
         static::created(function (Event $event) {
             $event->slug = 'events/' . Str::slug($event->title['ka']) . '-' . $event->id;
             $event->saveQuietly();

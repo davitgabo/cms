@@ -7,6 +7,8 @@ use App\Filament\Resources\ContentResource\RelationManagers;
 use App\Helpers\LanguageHelper;
 use App\Models\Content;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Components\ViewField;
@@ -26,21 +28,10 @@ class ContentResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateUpdated(function ($state) {
-                        session(['language' => $state]);
-                    })
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null)
-                    ->extraAttributes([
-                        '@change' => 'document.dispatchEvent(new CustomEvent("language-changed", { detail: { language: $event.target.value } }))'
-                    ]),
                 TextInput::make('title')
                     ->label(__('Title'))
                     ->required(),
+
                 Select::make('menus')
                     ->label(__('Menu'))
                     ->relationship('menus', 'name') // Many-to-Many relation with Menu
@@ -51,29 +42,35 @@ class ContentResource extends Resource
                     ->placeholder(__('No Menu'))
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->name['en'] ?? ''),
 
-                ViewField::make('body.ka')
-                    ->view('filament.tiny-editor')
-                    ->label('Body')
-                    ->columnSpanFull()
-                    ->viewData([
-                        'name' => 'body[ka]',
-                        'nameId' => 'body_ka',
-                        'livewireFieldPath' => 'data.body.ka',
-                        'value' => $form->getRecord() ? ($form->getRecord()->body['ka'] ?? '') : '',
-                    ])
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                ViewField::make('body.en')
-                    ->view('filament.tiny-editor')
-                    ->label('Body')
-                    ->columnSpanFull()
-                    ->viewData([
-                        'name' => 'body[en]',
-                        'nameId' => 'body_en',
-                        'livewireFieldPath' => 'data.body.en',
-                        'value' => $form->getRecord() ? ($form->getRecord()->body['en'] ?? '') : '',
-                    ])
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                ViewField::make('body.ka')
+                                    ->view('filament.tiny-editor')
+                                    ->label('Body')
+                                    ->columnSpanFull()
+                                    ->viewData([
+                                        'name' => 'body[ka]',
+                                        'nameId' => 'body_ka',
+                                        'livewireFieldPath' => 'data.body.ka',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->body['ka'] ?? '') : '',
+                                    ])
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                ViewField::make('body.en')
+                                    ->view('filament.tiny-editor')
+                                    ->label('Body')
+                                    ->columnSpanFull()
+                                    ->viewData([
+                                        'name' => 'body[en]',
+                                        'nameId' => 'body_en',
+                                        'livewireFieldPath' => 'data.body.en',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->body['en'] ?? '') : '',
+                                    ])
+                            ]),
+                    ])->columnSpan(2),
             ]);
     }
 

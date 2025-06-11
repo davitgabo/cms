@@ -11,6 +11,8 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -36,29 +38,49 @@ class NewsResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('language')
-                    ->label('Language')
-                    ->options(LanguageHelper::options())
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateUpdated(function ($state) {
-                        session(['language' => $state]);
-                    })
-                    ->afterStateHydrated(fn ($component, $state) => blank($state) ? $component->state(LanguageHelper::default()) : null)
-                    ->extraAttributes([
-                        '@change' => 'document.dispatchEvent(new CustomEvent("language-changed", { detail: { language: $event.target.value } }))'
-                    ]),
-
-                TextInput::make('title.ka')
-                    ->label(__('Title (GE)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') === 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                TextInput::make('title.en')
-                    ->label(__('Title (EN)'))
-                    ->columnSpanFull()
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
+                Tabs::make('Translations')
+                    ->tabs([
+                        Tab::make('ქართული')
+                            ->schema([
+                                TextInput::make('title.ka')
+                                    ->label('სახელი')
+                                    ->columnSpanFull()
+                                    ->required(),
+                                Textarea::make('short_description.ka')
+                                    ->label('მოკლე აღწერა')
+                                    ->columnSpanFull()
+                                    ->required(),
+                                ViewField::make('full_description.ka')
+                                    ->view('filament.tiny-editor')
+                                    ->label('Full Description (GE)')
+                                    ->columnSpanFull()
+                                    ->viewData([
+                                        'name' => 'full_description[ka]', // Use array syntax for name attribute
+                                        'nameId' => 'full_description_ka', // Safe ID for DOM element
+                                        'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
+                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
+                                    ])
+                            ]),
+                        Tab::make('English')
+                            ->schema([
+                                TextInput::make('title.en')
+                                    ->label('Name')
+                                    ->columnSpanFull(),
+                                Textarea::make('short_description.en')
+                                    ->label('Short Description')
+                                    ->columnSpanFull(),
+                                ViewField::make('full_description.en')
+                                    ->view('filament.tiny-editor')
+                                    ->label('Full Description (EN)')
+                                    ->columnSpanFull()
+                                    ->viewData([
+                                        'name' => 'full_description[en]', // Use array syntax for name attribute
+                                        'nameId' => 'full_description_en', // Safe ID for DOM element
+                                        'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
+                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
+                                    ])
+                            ]),
+                    ])->columnSpan(2),
 
                 TextInput::make('slug')
                     ->label(__('Slug'))
@@ -70,54 +92,20 @@ class NewsResource extends Resource
                     ->native(false)
                     ->displayFormat('Y-m-d H:i'),
 
-                Textarea::make('short_description.ka')
-                    ->label(__('Short Description (GE)'))
-                    ->columnSpanFull()
-                    ->required(fn (Get $get) => $get('language') !== 'ge')
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                Textarea::make('short_description.en')
-                    ->label(__('Short Description (EN)'))
-                    ->columnSpanFull()
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
-
-                ViewField::make('full_description.ka')
-                    ->view('filament.tiny-editor')
-                    ->label(__('Full Description (GE)'))
-                    ->columnSpanFull()
-                    ->viewData([
-                        'name' => 'full_description[ka]', // Use array syntax for name attribute
-                        'nameId' => 'full_description_ka', // Safe ID for DOM element
-                        'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
-                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
-                    ])
-                    ->hidden(fn (Get $get) => $get('language') !== 'ge'),
-
-                ViewField::make('full_description.en')
-                    ->view('filament.tiny-editor')
-                    ->label(__('Full Description (EN)'))
-                    ->columnSpanFull()
-                    ->viewData([
-                        'name' => 'full_description[en]', // Use array syntax for name attribute
-                        'nameId' => 'full_description_en', // Safe ID for DOM element
-                        'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
-                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
-                    ])
-                    ->hidden(fn (Get $get) => $get('language') !== 'en'),
-
                 FileUpload::make('image')
                     ->label(__('Image'))
                     ->image()
+                    ->columnSpanFull()
                     ->disk('public')
                     ->directory('uploads/news_images'),
 
-                Select::make('categories')
-                    ->visibleOn('create')
-                    ->label(__('Categories'))
-                    ->multiple()
-                    ->preload()
-                    ->relationship('categories', 'name_ka', fn (Builder $query) => $query->where('type', 'news'))
-                    ->required(),
+//                Select::make('categories')
+//                    ->visibleOn('create')
+//                    ->label(__('Categories'))
+//                    ->multiple()
+//                    ->preload()
+//                    ->relationship('categories', 'name_ka', fn (Builder $query) => $query->where('type', 'news'))
+//                    ->required(),
 
                 Toggle::make('publish')
                     ->label(__('Publish'))

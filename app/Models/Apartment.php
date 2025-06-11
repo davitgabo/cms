@@ -2,29 +2,16 @@
 
 namespace App\Models;
 
-use App\Contracts\HasMultilingualFields;
 use App\Enums\ApartmentStatus;
-use App\Observers\MultilingualFieldsObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Apartment extends Model implements HasMultilingualFields
+class Apartment extends Model
 {
     protected $casts = [
         'title' => 'array',
         'status' => ApartmentStatus::class,
     ];
-
-    public static function getMultilingualFields(): array
-    {
-        return ['title'];
-    }
-
-    protected static function booted(): void
-    {
-        static::observe(MultilingualFieldsObserver::class);
-    }
 
     public function building(): BelongsTo
     {
