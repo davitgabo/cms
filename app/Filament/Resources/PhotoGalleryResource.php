@@ -17,6 +17,8 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -46,7 +48,7 @@ class PhotoGalleryResource extends Resource
                             ]),
                     ])->columnSpan(2),
 
-                FileUpload::make('image')
+                FileUpload::make('cover_image')
                     ->label(__('Image'))
                     ->image()
                     ->disk('public')
@@ -63,7 +65,13 @@ class PhotoGalleryResource extends Resource
             ->defaultSort('order', 'asc') // explicitly sorting by 'order'
             ->reorderable('order')
             ->columns([
-                //
+                TextColumn::make('title.ka')
+                    ->label(__('Title (GE)'))
+                    ->searchable(),
+
+                ImageColumn::make('cover_image')
+                    ->label(__('Featured Image'))
+                    ->square(),
             ])
             ->filters([
                 //
@@ -81,7 +89,7 @@ class PhotoGalleryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\PhotosRelationManager::class,
         ];
     }
 
