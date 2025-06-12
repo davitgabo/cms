@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\Translatable\HasTranslations;
 
 class Event extends Model
 {
+    use HasTranslations;
+
+    public $translatable = ['title', 'short_description', 'full_description'];
+
     protected $casts = [
         'title' => 'array',
         'short_description' => 'array',
@@ -27,13 +32,8 @@ class Event extends Model
     }
     protected static function booted()
     {
-        static::created(function (Event $event) {
-            $event->slug = 'events/' . Str::slug($event->title['ka']) . '-' . $event->id;
-            $event->saveQuietly();
-        });
-
-        static::updated(function (Event $event) {
-            $event->slug = 'events/' . Str::slug($event->title['ka']) . '-' . $event->id;
+        static::saved(function (Event $event) {
+            $event->slug = 'events/' . Str::slug($event->getTranslation('title','ka')) . '-' . $event->id;
             $event->saveQuietly();
         });
 

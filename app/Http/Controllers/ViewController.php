@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class ViewController extends Controller
 {
-    public function index($slug = null)
+    public function index($locale, $slug = null)
     {
         if ($slug) {
             $page = Menu::where('slug',$slug)->with('contents')->first();
@@ -20,6 +21,6 @@ class ViewController extends Controller
         }
 
         $menus = Menu::published()->orderBy('order')->get();
-        return view("index", compact('page','menus'));
+        return view("index", compact('page','menus','locale'));
     }
 }

@@ -56,7 +56,7 @@ class EventResource extends Resource
                                         'name' => 'full_description[ka]', // Use array syntax for name attribute
                                         'nameId' => 'full_description_ka', // Safe ID for DOM element
                                         'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
-                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->getTranslation('full_description','ka') ?? '') : '',
                                     ]),
                             ]),
                         Tab::make('English')
@@ -74,7 +74,7 @@ class EventResource extends Resource
                                         'name' => 'full_description[en]', // Use array syntax for name attribute
                                         'nameId' => 'full_description_en', // Safe ID for DOM element
                                         'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
-                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->getTranslation('full_description','en') ?? '') : '',
                                     ]),
                             ]),
                     ])->columnSpan(2),
@@ -114,7 +114,7 @@ class EventResource extends Resource
             ->defaultSort('order','asc')
             ->reorderable('order')
             ->columns([
-                TextColumn::make('title.ka')
+                TextColumn::make('title')
                     ->label(__('Title (GE)'))
                     ->searchable(),
 

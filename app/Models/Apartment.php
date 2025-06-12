@@ -5,9 +5,14 @@ namespace App\Models;
 use App\Enums\ApartmentStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Translatable\HasTranslations;
 
 class Apartment extends Model
 {
+    use HasTranslations;
+
+    public $translatable = ['title'];
+
     protected $casts = [
         'title' => 'array',
         'status' => ApartmentStatus::class,

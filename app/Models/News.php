@@ -5,10 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\Translatable\HasTranslations;
 
 
 class News extends Model
 {
+    use HasTranslations;
+
+    public $translatable = [
+        'title',
+        'short_description',
+        'full_description'
+    ];
+
     protected $casts = [
         'title' => 'array',
         'short_description' => 'array',
@@ -30,7 +39,7 @@ class News extends Model
     {
         static::saved(function (News $news) {
             // For newly created menus, id is now guaranteed
-            $news->slug = 'news/' . Str::slug($news->title['ka']) . '-' . $news->id;
+            $news->slug = 'news/' . Str::slug($news->getTranslation('title','ka')) . '-' . $news->id;
             $news->saveQuietly();
         });
 

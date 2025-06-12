@@ -48,7 +48,7 @@ class ApartmentsRelationManager extends RelationManager
                     ->label(__('Floor'))
                     ->preload()
                     ->relationship('floor', 'title')
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title['ka'] ?? '')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title ?? '')
                     ->required(),
 
 
@@ -95,12 +95,12 @@ class ApartmentsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('title.ka')
+            ->recordTitleAttribute('title')
             ->columns([
-                TextColumn::make('title.ka')
+                TextColumn::make('title')
                     ->label(__('Title (Georgian)')),
 
-                TextColumn::make('floor.title.ka')
+                TextColumn::make('floor.title')
                     ->label(__('Floor')),
 
                 ImageColumn::make('image')
@@ -111,7 +111,7 @@ class ApartmentsRelationManager extends RelationManager
                 SelectFilter::make('floor_id')
                     ->label(__('Floor'))
                     ->relationship('floor', 'floor') // still use the relationship
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title['ka'] ?? '')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->title ?? '')
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

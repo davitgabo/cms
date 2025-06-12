@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', $page->name['ka'])
+@section('title', $page->name)
 
 @section('content')
 {{--    @php--}}
 {{--        $video = \App\Models\VideoGallery::whereNotNull('video')->first();--}}
 {{--    @endphp--}}
     @if(!$page->contents->isEmpty())
-    <x-page-banner :image="$page->background_image" :title="$page->name['ka']" />
+    <x-page-banner :image="$page->background_image" :title="$page->name" />
     @endif
 
     @foreach($page->contents as $content)

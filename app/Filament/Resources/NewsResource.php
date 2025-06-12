@@ -58,7 +58,7 @@ class NewsResource extends Resource
                                         'name' => 'full_description[ka]', // Use array syntax for name attribute
                                         'nameId' => 'full_description_ka', // Safe ID for DOM element
                                         'livewireFieldPath' => 'data.full_description.ka', // The path for Livewire
-                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['ka'] ?? '') : '',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->getTranslation('full_description','ka') ?? '') : '',
                                     ])
                             ]),
                         Tab::make('English')
@@ -77,7 +77,7 @@ class NewsResource extends Resource
                                         'name' => 'full_description[en]', // Use array syntax for name attribute
                                         'nameId' => 'full_description_en', // Safe ID for DOM element
                                         'livewireFieldPath' => 'data.full_description.en', // The path for Livewire
-                                        'value' => $form->getRecord() ? ($form->getRecord()->full_description['en'] ?? '') : '',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->getTranslation('full_description','en') ?? '') : '',
                                     ])
                             ]),
                     ])->columnSpan(2),
@@ -99,14 +99,12 @@ class NewsResource extends Resource
                     ->disk('public')
                     ->directory('uploads/news_images'),
 
-//                Select::make('categories')
-//                    ->visibleOn('create')
-//                    ->label(__('Categories'))
-//                    ->multiple()
-//                    ->preload()
-//                    ->relationship('categories', 'name_ka', fn (Builder $query) => $query->where('type', 'news'))
-//                    ->required(),
-
+                Select::make('categories')
+                    ->visibleOn('create')
+                    ->label(__('Categories'))
+                    ->multiple()
+                    ->preload()
+                    ->relationship('categories', 'name_ka', fn (Builder $query) => $query->where('type', 'news')),
                 Toggle::make('publish')
                     ->label(__('Publish'))
                     ->default(false),
@@ -123,8 +121,8 @@ class NewsResource extends Resource
             ->defaultSort('order', 'asc') // explicitly sorting by 'order'
             ->reorderable('order') // allows explicit drag-droppable sorting
             ->columns([
-                TextColumn::make('title.ka')
-                    ->label(__('Title (GE)'))
+                TextColumn::make('title')
+                    ->label(__('Title'))
                     ->searchable(),
 
                 ImageColumn::make('image')
@@ -136,7 +134,7 @@ class NewsResource extends Resource
                     ->dateTime('Y-m-d H:i'),
 
                 ToggleColumn::make('publish')
-                    ->label(__('Published')),
+                    ->label(__('Publish')),
             ])
             ->filters([
                 //

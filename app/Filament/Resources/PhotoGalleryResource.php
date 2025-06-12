@@ -65,8 +65,8 @@ class PhotoGalleryResource extends Resource
             ->defaultSort('order', 'asc') // explicitly sorting by 'order'
             ->reorderable('order')
             ->columns([
-                TextColumn::make('title.ka')
-                    ->label(__('Title (GE)'))
+                TextColumn::make('title')
+                    ->label(__('Title'))
                     ->searchable(),
 
                 ImageColumn::make('cover_image')

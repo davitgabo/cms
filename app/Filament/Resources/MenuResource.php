@@ -55,6 +55,7 @@ class MenuResource extends Resource
 
                 Select::make('menu_type')
                     ->label(__('Menu Type'))
+                    ->required()
                     ->options([
                         'top' => __('Top Menu'),
                         'footer' => __('Footer Menu'),
@@ -111,10 +112,10 @@ class MenuResource extends Resource
             ->reorderable('order')
             ->defaultSort('order')
             ->columns([
-                TextColumn::make('name.ka')
-                    ->label(__('Georgian Name'))
+                TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(),
-                TextColumn::make('parent.name.en')
+                TextColumn::make('parent.name')
                     ->label(__('Parent Menu'))
                     ->searchable(),
                 TextColumn::make('slug')

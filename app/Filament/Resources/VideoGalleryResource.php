@@ -93,11 +93,11 @@ class VideoGalleryResource extends Resource
                     ->label(__('Thumbnail'))
                     ->square(),
 
-                TextColumn::make('title.ka')
+                TextColumn::make('title')
                     ->label(__('Title (GE)'))
                     ->searchable(),
 
-                TextColumn::make('description.ka')
+                TextColumn::make('description')
                     ->label(__('Description (GE)'))
                     ->searchable(),
             ])

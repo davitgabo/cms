@@ -6,11 +6,11 @@
                 @if($menu->redirect_url)
                     <li>
                         <a href="{{ $menu->redirect_url }}" target="_blank" rel="noopener noreferrer">
-                            {{ $menu->name['ka'] }}
+                            {{ $menu->name }}
                         </a>
                     </li>
                 @else
-                    <li><a href="{{ $menu->slug }}">{{$menu->name['ka']}}</a></li>
+                    <li><a href="{{ $menu->slug }}">{{$menu->name}}</a></li>
                 @endif
             @endforeach
         </ul>
@@ -30,13 +30,13 @@
                 @if($menu->redirect_url)
                     <li>
                         <a href="{{ $menu->redirect_url }}" target="_blank" rel="noopener noreferrer">
-                            {{ $menu->name['ka'] }}
+                            {{ $menu->name }}
                         </a>
                     </li>
                 @else
                     <li>
                         <a href="{{ $menu->redirect_url }}" target="_blank" rel="noopener noreferrer">
-                            {{ $menu->name['ka'] }}
+                            {{ $menu->name }}
                         </a>
                     </li>
                 @endif

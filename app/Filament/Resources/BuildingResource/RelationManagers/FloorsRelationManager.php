@@ -67,9 +67,9 @@ class FloorsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('title.ka')
+            ->recordTitleAttribute('title')
             ->columns([
-                Tables\Columns\TextColumn::make('title.ka')
+                Tables\Columns\TextColumn::make('title')
                     ->label(__('Title (Georgian)')),
 
                 ImageColumn::make('image')

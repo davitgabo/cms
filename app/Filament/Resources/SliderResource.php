@@ -69,8 +69,8 @@ class SliderResource extends Resource
             ->defaultSort('order', 'asc') // explicitly sorting by 'order'
             ->reorderable('order') // allows explicit drag-droppable sorting
             ->columns([
-                TextColumn::make('title.ka')
-                    ->label(__('Title (GE)'))
+                TextColumn::make('title')
+                    ->label(__('Title'))
                     ->searchable(),
 
                 ImageColumn::make('image')
@@ -78,7 +78,7 @@ class SliderResource extends Resource
                     ->square(),
 
                 ToggleColumn::make('publish')
-                    ->label(__('Published')),
+                    ->label(__('Publish')),
             ])
             ->filters([
                 //

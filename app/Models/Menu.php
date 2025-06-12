@@ -4,9 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Translatable\HasTranslations;
 
 class Menu extends Model
 {
+    use HasTranslations;
+
+    public $translatable = ['name'];
+
     protected $casts = [
         'name' => 'array',
         'publish' => 'boolean',
@@ -64,7 +69,7 @@ class Menu extends Model
     protected static function booted()
     {
         static::saved(function ($menu) {
-            $expectedSlug = Str::slug($menu->name['ka']) . '-' . $menu->id;
+            $expectedSlug = Str::slug($menu->getTranslation('name', 'ka')) . '-' . $menu->id;
             if ($menu->slug !== $expectedSlug) {
                 $menu->slug = $expectedSlug;
                 $menu->saveQuietly();

@@ -40,7 +40,7 @@ class ContentResource extends Resource
                     ->preload()
                     ->nullable()
                     ->placeholder(__('No Menu'))
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name['en'] ?? ''),
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->name ?? ''),
 
                 Tabs::make('Translations')
                     ->tabs([
@@ -54,7 +54,7 @@ class ContentResource extends Resource
                                         'name' => 'body[ka]',
                                         'nameId' => 'body_ka',
                                         'livewireFieldPath' => 'data.body.ka',
-                                        'value' => $form->getRecord() ? ($form->getRecord()->body['ka'] ?? '') : '',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->getTranslation('body','ka') ?? '') : '',
                                     ])
                             ]),
                         Tab::make('English')
@@ -67,7 +67,7 @@ class ContentResource extends Resource
                                         'name' => 'body[en]',
                                         'nameId' => 'body_en',
                                         'livewireFieldPath' => 'data.body.en',
-                                        'value' => $form->getRecord() ? ($form->getRecord()->body['en'] ?? '') : '',
+                                        'value' => $form->getRecord() ? ($form->getRecord()->getTranslation('body','en') ?? '') : '',
                                     ])
                             ]),
                     ])->columnSpan(2),
@@ -81,7 +81,7 @@ class ContentResource extends Resource
                 TextColumn::make('title')
                     ->label(__('Title'))->sortable()->searchable(),
                 TextColumn::make('menus')
-                    ->getStateUsing(fn ($record) => $record->menus->pluck('name.en'))
+                    ->getStateUsing(fn ($record) => $record->menus->pluck('name'))
                     ->label(__('Assigned Menus'))
                     ->badge(),
             ])

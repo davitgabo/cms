@@ -48,6 +48,7 @@ class BuildingResource extends Resource
                     ])->columnSpan(2),
 
                 TextInput::make('total_floors')
+                    ->label(__('Total Floors'))
                     ->numeric()
                     ->step(1)
                     ->minValue(0)
@@ -67,7 +68,7 @@ class BuildingResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('title.ka')
+                TextColumn::make('title')
                     ->label(__('Title'))
                     ->searchable(),
 
