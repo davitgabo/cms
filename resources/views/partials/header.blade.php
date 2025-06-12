@@ -20,6 +20,12 @@
                 <input type="text" name="search" id="search" placeholder="ძიება">
             </form>
             <a href=""><i class="fa-brands fa-facebook-f"></i></a>
+            <button
+                onclick="location.href='/' + location.pathname.split('/').filter(Boolean).map((s, i) => i === 0 ? (s === 'en' ? 'ka' : 'en') : s).join('/')"
+                class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+                🌐 Switch Language
+            </button>
         </div>
         <img class="menu-toggle" src="{{ asset('assets/images/menu-icon.svg') }}" alt="menu icon" id="menu-toggle-button">
     </section>
